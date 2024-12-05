@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Music Player Styling */
+    .music-player {
+      background-color: #34495e;
+      border-radius: 15px;
+      width: 300px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .music-player h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    /* Album Cover */
+    .album-cover {
+      width: 150px;
+      height: 150px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      object-fit: cover;
+    }
+
+    /* Play/Pause Button */
+    .play-pause-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .play-pause-btn:hover {
+      background-color: #c0392b;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 5px;
+      background-color: #7f8c8d;
+      border-radius: 5px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background-color: #3498db;
+      border-radius: 5px;
+    }
+
+    /* Volume Control */
+    .volume-control {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .volume-control input[type="range"] {
+      width: 100px;
+      margin-left: 10px;
+    }
+
+    /* Play/Pause Button Positioning */
+    .play-pause-btn {
+      margin-bottom: 20px;
+    }
+
+    /* Song Title */
+    .song-title {
+      font-size: 16px;
+      font-weight: normal;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="music-player">
+    <h2>Music Player</h2>
+    <img src="pro2img.jpg" alt="Album Cover" class="album-cover">
+    <p class="song-title">Song Title - Artist Name</p>
+    
+    <!-- Play/Pause Button -->
+    <button class="play-pause-btn" id="playPauseBtn">&#9658;</button>
+
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Volume Control -->
+    <div class="volume-control">
+      <label for="volume">Volume</label>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
+    </div>
+
+    <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  </div>
+
+  <script>
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const audio = document.getElementById('audio');
+    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+    const volumeControl = document.getElementById('volume');
+
+    // Play or Pause the audio
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.innerHTML = '&#10074;&#10074;'; // Pause icon
+      } else {
+        audio.pause();
+        playPauseBtn.innerHTML = '&#9658;'; // Play icon
+      }
+    });
+
+    // Update the progress bar as the song plays
+    audio.addEventListener('timeupdate', () => {
+      const progress = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = `${progress}%`;
+    });
+
+    // Click on the progress bar to skip to that part of the song
+    progressContainer.addEventListener('click', (e) => {
+      const progressContainerWidth = progressContainer.offsetWidth;
+      const clickPosition = e.offsetX;
+      const newTime = (clickPosition / progressContainerWidth) * audio.duration;
+      audio.currentTime = newTime;
+    });
+
+    // Control the volume
+    volumeControl.addEventListener('input', () => {
+      audio.volume = volumeControl.value;
+    });
+  </script>
+
+</body>
+</html>
